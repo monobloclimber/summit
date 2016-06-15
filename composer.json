@@ -13,6 +13,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0"
+        "php": ">=5.5.0",
+        "monobloclimber/summit": "dev-master"
     }
 }
