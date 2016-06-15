@@ -23,14 +23,14 @@ class Autoloader{
 	public function load($class) {
 		$array = explode('\\', $class);
 
-        if(count($array) > 1){
-            $class = end($array);
-        }
+		if(count($array) > 1){
+			$class = end($array);
+		}
 
-        foreach ($this->paths as $path) {
+		foreach ($this->paths as $path) {
 			if(file_exists('../app/' . $path.'/' . $class . '.php')){
-    			include_once '../app/' . $path.'/' . $class . '.php';
-    			break;
+				include_once '../app/' . $path.'/' . $class . '.php';
+				break;
 			}
 		}
 	}
