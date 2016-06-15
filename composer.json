@@ -3,16 +3,17 @@
 	"description": "The Summit Framework.",
 	"keywords": ["framework", "summit", "php"],
 	"homepage": "https://github.com/monobloclimber/summit",
-    "type": "project",
+	"type": "project",
 	"license": "MIT",
-    "authors": [
-        {
-            "name": "Clément POUJOL",
-            "homepage": "http://clementpoujol.fr",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "php": ">=5.5.0"
-    }
+	"minimum-stability": "dev",
+	"authors": [
+		{
+			"name": "Clément POUJOL",
+			"homepage": "http://clementpoujol.fr",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.5.0"
+	}
 }
