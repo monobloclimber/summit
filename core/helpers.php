@@ -1,0 +1,139 @@
+<?php
+/**
+ * Return true if the protocol used is https
+ * @return boolean
+ */
+function isSecure(){
+	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/**
+ * Return the corresponding URL of the road name
+ * @param  string $routeName
+ * @param  array  $parameters
+ * @return string
+ */
+function route($routeName, $parameters = []){
+	if(isSecure()){
+		$protocol = 'https://';
+	}else{
+		$protocol = 'http://';
+	}
+	return $protocol . $_SERVER['HTTP_HOST'] . '/' . \App::get()->router->url($routeName, $parameters);
+}
+
+/**
+ * Return the corresponding URL of the asset file
+ * @param  string $path
+ * @return string
+ */
+function asset($path){
+	if(isSecure()){
+		$protocol = 'https://';
+	}else{
+		$protocol = 'http://';
+	}
+	return $protocol . $_SERVER['HTTP_HOST'] . '/assets/' . $path;
+}
+
+/**
+ * Built and return the link
+ * @param  string $url
+ * @param  string $anchor
+ * @param  array  $attributes
+ * @return string
+ */
+function linkTo($url, $anchor, $attributes = []){
+	$atts = [];
+	foreach ($attributes as $key => $value) {
+		$atts[] = $key . '=' . '"' . $value . '"';
+	}
+	$attributes = implode(' ', $atts);
+
+	return '<a href="' . $url . '" ' . $attributes . '>' . $anchor . '</a>';
+}
+
+/**
+ * Built and return the route link
+ * @param  string $routeName
+ * @param  string $anchor
+ * @param  array  $parameters
+ * @param  array  $attributes
+ * @return string
+ */
+function linkToRoute($routeName, $anchor, $parameters = [], $attributes = []){
+	$url = route($routeName, $parameters);
+	return linkTo($url, $anchor, $attributes);
+}
+
+/**
+ * Cutting a string according to limit planned
+ * @param  string $string
+ * @param  integer $limit
+ * @param  string $end
+ * @return string
+ */
+function strLimit($string, $limit, $end = '...'){
+	$string = strip_tags($string);
+	return substr($string, 0, $limit) . $end;
+};
+
+/**
+ * Redirect to the url with the error code
+ * @param  string $url
+ * @param  string $code
+ * @return
+ */
+function redirect($url, $code = '302'){
+	return header("Location: " . $url, true, $code);
+}
+
+/**
+ * Dump the given variable and end execution of the script
+ * @param  [type] $value
+ * @return
+ */
+function dd($value){
+	var_dump($value);
+	die();
+}
+
+/**
+ * Return the views path
+ * @return string
+ */
+function viewsPath(){
+	return ROOT . '/app/views/';
+}
+
+/**
+ * Return the app path
+ * @return string
+ */
+function appPath(){
+	return ROOT . '/app/';
+}
+
+/**
+ * Return the 404 page if debug mode is false
+ * @return
+ */
+function ifNoDebug404(){
+	if(!DEBUG){
+        $controller = new \Core\Controller\Controller();
+        return $controller->notFound();
+    }
+}
+
+/**
+ * Return a string encrypted by bcrypt
+ * @param  string $string
+ * @return string
+ */
+function cryptPwd($string){
+	return password_hash($string, PASSWORD_BCRYPT);
+}

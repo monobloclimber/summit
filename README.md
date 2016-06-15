@@ -1,0 +1,4 @@
+# Summit PHP Framework
+
+Summit Framework is a light PHP framework using MVC architecture inspired by other existing frameworks. It is by default configured to work with MySQL but it may well be modified to work with other DBMS. This framework was designed to be maintained and that without major changes. Many frameworks already exists, however, when you pass a version X.x to X+1.x, there are often many changes and how to use the tool and generally affected by them. It is because of that we wanted to make a light and durable framework in time. Summit framework is basic, it contains the basic elements to develop its application in good conditions. This tool will have updates but they will never be very far from the original version (v1). You can edit or contribute to this project freely.
+Good development…
