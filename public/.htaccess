@@ -1,10 +1,15 @@
 RewriteEngine On
 
-# Redirect Slashes...
+# Remove the last slash
 RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-# Front Controller...
+# Redirect all URL with index.php to root (to avoid duplicate)
+RewriteCond %{THE_REQUEST} /index\.php [NC]
+RewriteRule ^(.*)index.php$ /$1? [R=301,L]
+
+# Allow if folder or file exists
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 
+# Sends to the app
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
