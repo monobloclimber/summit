@@ -5,7 +5,6 @@
 	"homepage": "https://github.com/monobloclimber/summit",
 	"type": "project",
 	"license": "MIT",
-	"minimum-stability": "dev",
 	"authors": [
 		{
 			"name": "Clément POUJOL",
