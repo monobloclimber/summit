@@ -74,11 +74,15 @@ class Database{
 
 	public function executeBind($statement, $attributes, $fetch = null, $one = null){
 		$req = $this->getPdo()->prepare($statement);
-		foreach ($attributes as $bind) {
-			foreach ($bind as $key => $value) {
-				$req->bindValue($key, $value);
+
+		if($attributes){
+			foreach ($attributes as $bind) {
+				foreach ($bind as $key => $value) {
+					$req->bindValue($key, $value);
+				}
 			}
 		}
+
 		$result = $req->execute();
 
 		if(is_null($fetch)){	
