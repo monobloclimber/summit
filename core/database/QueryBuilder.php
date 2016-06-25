@@ -177,7 +177,7 @@ class QueryBuilder{
 	public function update(){
 		$args = func_get_args();
 		foreach ($args[0] as $key => $value) {
-			$ref = uniqid(':' . $key);
+			$ref = uniqid(':');
 			$sets[] = $key . ' = ' . $ref;
 			$values[] = [$ref => $value];
 		}
@@ -206,7 +206,7 @@ class QueryBuilder{
 		if($this->where){
 			foreach ($this->where as $where) {
 				$column = $where[0];
-				$ref = uniqid(':'.$column);
+				$ref = uniqid(':');
 				$sign = $where[1];
 				$value = $where[2];
 				$whereRefs[] = $column . ' ' . $sign . ' ' . $ref;
@@ -237,7 +237,7 @@ class QueryBuilder{
 		if($this->orWhere){
 			foreach ($this->orWhere as $where) {
 				$column = $where[0];
-				$ref = uniqid(':'.$column);
+				$ref = uniqid(':');
 				$sign = $where[1];
 				$value = $where[2];
 				$orWhereRefs[] = $column . ' ' . $sign . ' ' . $ref;
