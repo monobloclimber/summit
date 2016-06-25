@@ -12,5 +12,6 @@ return [
 		'db_name' => '',
 		'user'    => '',
 		'pass'    => '',
+		'charset' => 'utf8',
 	],
 ];

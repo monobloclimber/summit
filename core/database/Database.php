@@ -16,11 +16,12 @@ class Database{
 	private $db_pass;
 	private $db_host;
 	private $fetch_mode;
+	private $charset;
 	private $pdo;
 
 	public function __construct($config){
-
 		$this->fetch_mode = $config['fetch_mode'];
+		$this->charset    = $config['connections']['charset'];
 		$this->db_name    = $config['connections']['db_name'];
 		$this->db_user    = $config['connections']['user'];
 		$this->db_pass    = $config['connections']['pass'];
@@ -29,7 +30,7 @@ class Database{
 
 	private function getPDO(){
 		if($this->pdo === null){
-			$pdo = new PDO('mysql:dbname=' . $this->db_name .';host=' . $this->db_host, $this->db_user, $this->db_pass);
+			$pdo = new PDO('mysql:charset=' . $this->charset . ';dbname=' . $this->db_name .';host=' . $this->db_host, $this->db_user, $this->db_pass);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$this->pdo = $pdo;
 		}
