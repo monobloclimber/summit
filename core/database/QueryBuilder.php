@@ -16,6 +16,7 @@ class QueryBuilder{
 	private $where     = [];
 	private $orWhere   = [];
 	private $whereIn   = [];
+	private $whereRaw  = [];
 	private $table     = [];
 	private $skip      = 0;
 	private $take      = 0;
@@ -43,6 +44,13 @@ class QueryBuilder{
 
 	public function whereIn(){
 		$this->whereIn[] = func_get_args();
+		return $this;
+	}
+
+	public function whereRaw(){
+		foreach (func_get_args() as $arg) {
+			$this->whereRaw[] = $arg;
+		}
 		return $this;
 	}
 
@@ -100,19 +108,43 @@ class QueryBuilder{
 
 		if($this->join){
 			foreach ($this->join as $join) {
-				$return .= ' INNER JOIN ' . $join[0] . ' ON ' . $join[1] . ' = ' . $join[2];
+				if(count($join) == 3){
+					$sign = '=';
+					$last = $join[2];
+				}else{
+					$sign = $join[2];
+					$last = $join[3];
+				}
+
+				$return .= ' INNER JOIN ' . $join[0] . ' ON ' . $join[1] . ' ' . $sign  . ' ' . $last;
 			}
 		}
 
 		if($this->leftJoin){
 			foreach ($this->leftJoin as $join) {
-				$return .= ' LEFT JOIN ' . $join[0] . ' ON ' . $join[1] . ' = ' . $join[2];
+				if(count($join) == 3){
+					$sign = '=';
+					$last = $join[2];
+				}else{
+					$sign = $join[2];
+					$last = $join[3];
+				}
+
+				$return .= ' LEFT JOIN ' . $join[0] . ' ON ' . $join[1] . ' ' . $sign  . ' ' . $last;
 			}
 		}
 
 		if($this->rightJoin){
 			foreach ($this->rightJoin as $join) {
-				$return .= ' RIGHT JOIN ' . $join[0] . ' ON ' . $join[1] . ' = ' . $join[2];
+				if(count($join) == 3){
+					$sign = '=';
+					$last = $join[2];
+				}else{
+					$sign = $join[2];
+					$last = $join[3];
+				}
+
+				$return .= ' RIGHT JOIN ' . $join[0] . ' ON ' . $join[1] . ' ' . $sign  . ' ' . $last;
 			}
 		}
 		
@@ -120,6 +152,12 @@ class QueryBuilder{
 			$treatment = $this->preprocessingOnWhere($return);
 			$return = $treatment[0];
 			$values = $treatment[1];
+		}
+
+		if($this->whereRaw){
+			foreach ($this->whereRaw as $where){
+				$return .= ' '.$where;
+			}
 		}
 
 		if($this->group){
@@ -150,8 +188,12 @@ class QueryBuilder{
 		return \App::get()->getDB()->executeBind($result[0], $result[1], true, true);
 	}
 
-	public function count(){
-		$this->fields = ['COUNT(*) as aggregate'];
+	public function count($field = null){
+		if($field){
+			$this->fields = ['COUNT(' . $field . ') as aggregate'];
+		}else{
+			$this->fields = ['COUNT(*) as aggregate'];
+		}
 		return $this->first()->aggregate;
 	}
 
