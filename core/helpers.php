@@ -79,7 +79,7 @@ function linkToRoute($routeName, $anchor, $parameters = [], $attributes = []){
  */
 function strLimit($string, $limit, $end = '...'){
 	$string = strip_tags($string);
-	return substr($string, 0, $limit) . $end;
+	return mb_substr($string, 0, $limit, 'UTF-8') . $end;
 };
 
 /**
@@ -90,6 +90,15 @@ function strLimit($string, $limit, $end = '...'){
  */
 function redirect($url, $code = '302'){
 	return header("Location: " . $url, true, $code);
+}
+
+/**
+ * Redirect to the url of referer
+ * @return
+ */
+function redirectBack(){
+	if(isset($_SERVER['HTTP_REFERER']))
+		return redirect($_SERVER['HTTP_REFERER'], 302);
 }
 
 /**
@@ -130,10 +139,66 @@ function ifNoDebug404(){
 }
 
 /**
+ * Return a 404 error
+ * @return
+ */
+function error404(){
+	return header('HTTP/1.0 404 Not Found');
+}
+
+/**
  * Return a string encrypted by bcrypt
  * @param  string $string
  * @return string
  */
 function cryptPwd($string){
 	return password_hash($string, PASSWORD_BCRYPT);
+}
+
+/**
+ * Return current URL
+ * @return string
+ */
+function currentUrl(){
+	if(isSecure()){
+		$protocol = 'https://';
+	}else{
+		$protocol = 'http://';
+	}
+
+	return $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+}
+
+/**
+ * Return true if the request use AJAX
+ * @return boolean
+ */
+function isAjax(){
+	if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')){
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Return an URI segment
+ * @return string
+ */
+function segmentUri($segment){
+	$segment = $segment - 1;
+	$uri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+	if(isset($uri[$segment])){
+		return $uri[$segment];
+	}
+	
+	return false;
+}
+
+/**
+ * Applies the htmlentities function
+ * @param  string $string 
+ * @return string
+ */
+function c($string){
+	return htmlentities($string);
 }
