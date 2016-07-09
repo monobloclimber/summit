@@ -6,15 +6,18 @@
  * 
  */
 
+use \Core\Authentication\Authentication;
 use \Core\Autoloader\Autoloader;
-use \Core\Router\Router;
-use \Core\Database\Database;
+use \Core\Database\QueryBuilder;
 use \App\Middleware\Middleware;
+use \Core\Database\Database;
+use \Core\Router\Router;
 
 class App{
 
-	private $db_instance;
 	private static $_instance;
+	private $db_instance;
+	private $auth_instance;
 	public $router;
 
 	/**
@@ -32,7 +35,6 @@ class App{
 	 * Launches the prerequisites to using the application
 	 */
 	public function run(){
-		session_start();
 		require_once(ROOT.'/core/autoloader/Autoloader.php');
 		$paths = require_once(ROOT.'/app/config/paths.php');
 		$autoloader = new Autoloader($paths);
@@ -41,6 +43,9 @@ class App{
 		$config = require(ROOT.'/app/config/app.php');
 		define('DEBUG', Config::get()->read('debug'));
 		if(!DEBUG){error_reporting(0);}
+
+		session_cache_expire(Config::get()->read('session'));
+		session_start();
 		
 		require_once(ROOT.'/core/helpers.php');
 		
@@ -79,5 +84,28 @@ class App{
 		}
 		
 		return $this->db_instance;
+	}
+
+	/**
+	 * Created or retrieve an instance of authentication class
+	 * @return object an instance
+	 */
+	public function Auth(){
+		$authentication = require(ROOT.'/app/config/authentication.php');
+		if($authentication){
+			if(is_null($this->auth_instance)){
+				$this->auth_instance = new Authentication($authentication);
+			}
+			
+			return $this->auth_instance;
+		}
+	}
+
+	/**
+	 * Instantiate a QueryBuilder class
+	 * @return object a class instance
+	 */
+	public function QueryBuilder(){
+		return new QueryBuilder();
 	}
 }
