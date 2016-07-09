@@ -42,6 +42,7 @@ class Router{
     public function run(){
         if(!isset($this->routes[$_SERVER['REQUEST_METHOD']])){
             ifNoDebug404();
+            error404();
             throw new \Exception('Request method does not exist');
         }
         
@@ -52,12 +53,14 @@ class Router{
         }
         
         ifNoDebug404();
+        error404();
         throw new \Exception('No route matches');
     }
 
     public function url($name, $params = []){
         if(!isset($this->namedRoutes[$name])){
             ifNoDebug404();
+            error404();
             throw new \Exception('No route matches this name');
         }
         return $this->namedRoutes[$name]->getUrl($params);

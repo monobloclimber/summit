@@ -56,6 +56,7 @@ class Route{
                 $theMiddleware = new $theMiddleware;
                 $theMiddleware->execute();
             }else{
+                error404();
                 throw new \Exception("The called middleware is unknown");
             }
         }
