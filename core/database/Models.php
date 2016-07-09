@@ -29,4 +29,14 @@ class Models{
 		$req = $this->query('SELECT * FROM ' . $this->table);
 		return $req;
 	}
+
+	public function transaction(){
+		$this->db->transaction();
+		ob_start();
+	}
+
+	public function commit(){
+		ob_end_flush();
+		$this->db->commit();
+	}
 }
