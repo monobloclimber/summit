@@ -93,4 +93,12 @@ class Database{
 			return $req->fetchAll($this->fetch_mode);
 		}
 	}
+
+	public function transaction(){
+		$this->getPdo()->beginTransaction();
+	}
+
+	public function commit(){
+		$this->getPdo()->commit();
+	}
 }
