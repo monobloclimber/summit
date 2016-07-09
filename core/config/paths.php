@@ -16,6 +16,10 @@ return [
 	'../core/router',
 	'../core/cache',
 	'../core/database',
-	'../core/class',
+	'../core/authentication',
+	'../core/controller',
+	'../core/session',
 	'../core/template',
+	'../core/mail',
+	'../core/pagination',
 ];
