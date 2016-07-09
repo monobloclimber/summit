@@ -29,5 +29,10 @@ class Controller{
 	public function notFound(){
 		header('HTTP/1.0 404 Not Found');
 		$this->render->make('errors.404');
+		die();
+	}
+
+	public function auth(){
+		return \App::get()->auth();
 	}
 }
