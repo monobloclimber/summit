@@ -42,7 +42,12 @@ class App{
 		
 		$config = require(ROOT.'/app/config/app.php');
 		define('DEBUG', Config::get()->read('debug'));
-		if(!DEBUG){error_reporting(0);}
+		if(!DEBUG){
+			error_reporting(0);
+		}else{
+			ini_set('display_errors','on');
+			error_reporting(E_ALL);
+		}
 
 		session_cache_expire(Config::get()->read('session'));
 		session_start();
