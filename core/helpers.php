@@ -78,6 +78,9 @@ function linkToRoute($routeName, $anchor, $parameters = [], $attributes = []){
  * @return string
  */
 function strLimit($string, $limit, $end = '...'){
+	if($limit > strlen($string)){
+		$end = '';
+	}
 	$string = strip_tags($string);
 	return mb_substr($string, 0, $limit, 'UTF-8') . $end;
 };
@@ -133,7 +136,7 @@ function appPath(){
  */
 function ifNoDebug404(){
 	if(!DEBUG){
-        $controller = new \Core\Controller\Controller();
+        $controller = new \App\Controller\AppController();
         return $controller->notFound();
     }
 }
