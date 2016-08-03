@@ -18,6 +18,10 @@ class Cache {
 			$this->dirname = ROOT . '/app/' . trim(\Config::get()->read('cache'), '/') . '/';
 		}else{
 			$this->dirname = ROOT . '/app/' . $dirname;
+			if(!file_exists($this->dirname)){
+				mkdir($this->dirname);
+				chmod($this->dirname, 0777);
+			}
 		}
 		$this->duration = $duration;
 	}
