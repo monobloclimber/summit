@@ -191,7 +191,12 @@ function segmentUri($segment){
 	$segment = $segment - 1;
 	$uri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 	if(isset($uri[$segment])){
-		return $uri[$segment];
+		$pos = strpos($uri[$segment], '?');
+		if($pos === false){
+			return $uri[$segment];
+		}else{
+			return substr($uri[$segment], 0, $pos);
+		}
 	}
 	
 	return false;

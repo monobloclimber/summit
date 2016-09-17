@@ -249,8 +249,13 @@ class QueryBuilder{
 			foreach ($this->where as $where) {
 				$column = $where[0];
 				$ref = uniqid(':');
-				$sign = $where[1];
-				$value = $where[2];
+				if(count($where) == 2){
+					$sign = '=';
+					$value = $where[1];
+				}else{
+					$sign = $where[1];
+					$value = $where[2];
+				}
 				$whereRefs[] = $column . ' ' . $sign . ' ' . $ref;
 				$values[] = [$ref => $value];
 			}
