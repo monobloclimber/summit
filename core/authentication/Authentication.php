@@ -25,12 +25,15 @@ class Authentication {
 		$user = $this->exist($key, $login);
 		$config = $this->config[$key];
 
-		if($user && password_verify($password, $user->$config['password'])){
+		$password_key = $config['password'];
+		$login_key = $config['login'];
+
+		if($user && password_verify($password, $user->$password_key)){
 			Session::push(
 				'authentication',
 				[
 					'key' => $key,
-					'login'  => $user->$config['login']
+					'login'  => $user->$login_key
 				]
 			);
 			return true;
@@ -80,6 +83,8 @@ class Authentication {
 		$this->checkConfig($key);
 
 		$config = $this->config[$key];
+		$login_key = $config['login'];
+
 		$query = new QueryBuilder();
 		$user = $query->table($config['table'])->where($config['id'], '=', $id)->first();
 
@@ -88,7 +93,7 @@ class Authentication {
 				'authentication',
 				[
 					'key' => $key,
-					'login'  => $user->$config['login']
+					'login'  => $user->$login_key
 				]
 			);
 			return true;
