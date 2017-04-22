@@ -131,6 +131,14 @@ function appPath(){
 }
 
 /**
+ * Return the public path
+ * @return string
+ */
+function publicPath(){
+	return ROOT . '/public/';
+}
+
+/**
  * Return the 404 page if debug mode is false
  * @return
  */
