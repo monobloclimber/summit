@@ -12,57 +12,58 @@ use \Core\Controller\Controller;
 
 class Router{
 
-    private $url;
-    private $routes = [];
-    private $namedRoutes = [];
+	private $url;
+	private $routes = [];
+	private $namedRoutes = [];
 
 	public function __construct($url){
 		$this->url = trim($url, '/');
+		unset($_GET['url']);
 	}
 
 	public function get($path, $callable, $name = null, $middleware = null){
 		return $this->add($path, $callable, $name, 'GET', $middleware);
 	}
 
-    public function post($path, $callable, $name = null, $middleware = null){
-        return $this->add($path, $callable, $name, 'POST', $middleware);
-    }
+	public function post($path, $callable, $name = null, $middleware = null){
+		return $this->add($path, $callable, $name, 'POST', $middleware);
+	}
 
-    public function add($path, $callable, $name, $method, $middleware){
-        $route = new Route($path, $callable, $middleware);
-        $this->routes[$method][] = $route;
+	public function add($path, $callable, $name, $method, $middleware){
+		$route = new Route($path, $callable, $middleware);
+		$this->routes[$method][] = $route;
 
-        if($name){
-            $this->namedRoutes[$name] = $route;
-        }
+		if($name){
+			$this->namedRoutes[$name] = $route;
+		}
 
-        return $route;
-    }
+		return $route;
+	}
 
-    public function run(){
-        if(!isset($this->routes[$_SERVER['REQUEST_METHOD']])){
-            ifNoDebug404();
-            error404();
-            throw new \Exception('Request method does not exist');
-        }
-        
-        foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route){
-            if($route->match($this->url)){
-                return $route->call();
-            }
-        }
-        
-        ifNoDebug404();
-        error404();
-        throw new \Exception('No route matches');
-    }
+	public function run(){
+		if(!isset($this->routes[$_SERVER['REQUEST_METHOD']])){
+			ifNoDebug404();
+			error404();
+			throw new \Exception('Request method does not exist');
+		}
+		
+		foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route){
+			if($route->match($this->url)){
+				return $route->call();
+			}
+		}
+		
+		ifNoDebug404();
+		error404();
+		throw new \Exception('No route matches');
+	}
 
-    public function url($name, $params = []){
-        if(!isset($this->namedRoutes[$name])){
-            ifNoDebug404();
-            error404();
-            throw new \Exception('No route matches this name');
-        }
-        return $this->namedRoutes[$name]->getUrl($params);
-    }
+	public function url($name, $params = []){
+		if(!isset($this->namedRoutes[$name])){
+			ifNoDebug404();
+			error404();
+			throw new \Exception('No route matches this name');
+		}
+		return $this->namedRoutes[$name]->getUrl($params);
+	}
 }
