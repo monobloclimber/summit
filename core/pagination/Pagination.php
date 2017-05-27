@@ -38,13 +38,14 @@ class Pagination {
 		return ['skip' => $skip, 'take' => $take];
 	}
 
-	public function appends($params){
+	public function appends($params = null){
+		if($params){
+			foreach ($params as $key => $value) {
+				$tab[] = $key.'='.$value;
+			}
 
-		foreach ($params as $key => $value) {
-			$tab[] = $key.'='.$value;
+			$this->params = '?'.implode('&', $tab).'&';
 		}
-
-		$this->params = '?'.implode('&', $tab).'&';
 
 		return $this;
 	}
