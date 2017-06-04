@@ -29,6 +29,43 @@ class Router{
 		return $this->add($path, $callable, $name, 'POST', $middleware);
 	}
 
+	public function group($attributes = [], $children = []){
+		$prefix = null;
+		if(array_key_exists('prefix', $attributes)){
+			$prefix = $attributes['prefix'];
+		}
+
+		$middleware = null;
+		if(array_key_exists('middleware', $attributes)){
+			$middleware = $attributes['middleware'];
+		}
+
+		foreach ($children as $key => $value) {
+			if(is_array($value[0])){
+				foreach ($value as $value) {
+					$this->groupParse($key, $prefix, $value, $middleware);
+				}
+			}else{
+				$this->groupParse($key, $prefix, $value, $middleware);
+			}
+		}
+	}
+
+	private function groupParse($key, $prefix, $value, $middleware){
+		if($prefix){
+			$path = $prefix.$value[0];
+		}else{
+			$path = $value[0];
+		}
+
+		$name = null;
+		if(isset($value[2])){
+			$name = $value[2];
+		}
+
+		$this->$key($path, $value[1], $name, $middleware);
+	}
+
 	public function add($path, $callable, $name, $method, $middleware){
 		$route = new Route($path, $callable, $middleware);
 		$this->routes[$method][] = $route;
