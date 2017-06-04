@@ -63,6 +63,10 @@ class Router{
 			$name = $value[2];
 		}
 
+		if(!$middleware && isset($value['3'])){
+			$middleware = $value['3'];
+		}
+
 		$this->$key($path, $value[1], $name, $middleware);
 	}
 
