@@ -10,14 +10,14 @@ namespace Core\Database;
 
 use App;
 
-class QueryBuilder{
+class QueryBuilder extends Models{
 
 	private $fields    = ['*'];
 	private $where     = [];
 	private $orWhere   = [];
 	private $whereIn   = [];
 	private $whereRaw  = [];
-	private $table     = [];
+	private $from      = [];
 	private $skip      = 0;
 	private $take      = 0;
 	private $group     = [];
@@ -27,6 +27,16 @@ class QueryBuilder{
 	private $rightJoin = [];
 	private $getId     = false;
 
+	public function __construct(\Core\Database\Database $db = null){
+		$this->db = $db;
+
+		if(isset($this->table)){
+			$this->from  = [$this->table];
+		}else{
+			$this->from  = [];
+		}
+	}
+	
 	public function select(){
 		$this->fields = func_get_args();
 		return $this;
@@ -56,9 +66,9 @@ class QueryBuilder{
 
 	public function table($table, $alias = null){
 		if(is_null($alias)){
-			$this->table[] = $table;
+			$this->from[] = $table;
 		}else{
-			$this->table[] = "$table AS $alias";
+			$this->from[] = "$table AS $alias";
 		}
 		return $this;
 	}
@@ -104,7 +114,7 @@ class QueryBuilder{
 
 	public function builder(){
 		$values = null;
-		$return = 'SELECT ' . implode(', ', $this->fields) . ' FROM ' . implode(', ', $this->table);
+		$return = 'SELECT ' . implode(', ', $this->fields) . ' FROM ' . implode(', ', $this->from);
 
 		if($this->join){
 			foreach ($this->join as $join) {
@@ -207,7 +217,7 @@ class QueryBuilder{
 		$columns = implode(', ', $keys);
 		$references = implode(', ', $refs);
 
-		$req = 'INSERT INTO ' . $this->table[0] . ' (' . $columns . ') VALUES(' . $references . ')';
+		$req = 'INSERT INTO ' . $this->from[0] . ' (' . $columns . ') VALUES(' . $references . ')';
 		return \App::get()->getDB()->insert($req, $values, $this->getId);
 	}
 
@@ -225,7 +235,7 @@ class QueryBuilder{
 		}
 		$columns = implode(', ', $sets);
 
-		$req = 'UPDATE ' . $this->table[0] . ' SET ' . $columns;
+		$req = 'UPDATE ' . $this->from[0] . ' SET ' . $columns;
 
 		$return = $this->preprocessingOnWhere($req);
 		$req = $return[0];
@@ -235,7 +245,7 @@ class QueryBuilder{
 	}
 
 	public function delete(){
-		$req = 'DELETE FROM ' . $this->table[0];
+		$req = 'DELETE FROM ' . $this->from[0];
 
 		$return = $this->preprocessingOnWhere($req);
 		$req = $return[0];
