@@ -48,20 +48,21 @@ class App{
 			ini_set('display_errors','on');
 			error_reporting(E_ALL);
 		}
-
-		session_cache_expire(Config::get()->read('session'));
+		
+		ini_set('session.cookie_lifetime', (60 * Config::get()->read('session')));
+		ini_set('session.gc_maxlifetime', (60 * Config::get()->read('session')));
 		session_start();
 		
 		require_once(ROOT.'/core/helpers.php');
 		
-        $router = new Router(isset($_GET['url']) ? $_GET['url'] : null);
-        require_once(ROOT.'/app/routes.php');
-        $this->router = $router;
+		$router = new Router(isset($_GET['url']) ? $_GET['url'] : null);
+		require_once(ROOT.'/app/routes.php');
+		$this->router = $router;
 		
 		$middleware = new Middleware();
 		$middleware->load();
-        
-        $router->run();
+		
+		$router->run();
 	}	
 
 	/**
