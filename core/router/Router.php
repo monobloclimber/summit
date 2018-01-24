@@ -21,12 +21,12 @@ class Router{
 		unset($_GET['url']);
 	}
 
-	public function get($path, $callable, $name = null, $middleware = null){
-		return $this->add($path, $callable, $name, 'GET', $middleware);
+	public function get($path, $callable, $name = null, $middleware = null, $constraint = []){
+		return $this->add($path, $callable, $name, 'GET', $middleware, $constraint);
 	}
 
-	public function post($path, $callable, $name = null, $middleware = null){
-		return $this->add($path, $callable, $name, 'POST', $middleware);
+	public function post($path, $callable, $name = null, $middleware = null, $constraint = []){
+		return $this->add($path, $callable, $name, 'POST', $middleware, $constraint);
 	}
 
 	public function group($attributes = [], $children = []){
@@ -63,15 +63,20 @@ class Router{
 			$name = $value[2];
 		}
 
-		if(!$middleware && isset($value['3'])){
-			$middleware = $value['3'];
+		if(!$middleware && isset($value[3])){
+			$middleware = $value[3];
 		}
 
-		$this->$key($path, $value[1], $name, $middleware);
+		if(isset($value[4])){
+			return $this->$key($path, $value[1], $name, $middleware, $value[4]);
+		}
+
+		return $this->$key($path, $value[1], $name, $middleware);
 	}
 
-	public function add($path, $callable, $name, $method, $middleware){
+	public function add($path, $callable, $name, $method, $middleware, $constraint){
 		$route = new Route($path, $callable, $middleware);
+		$route->params = $constraint;
 		$this->routes[$method][] = $route;
 
 		if($name){

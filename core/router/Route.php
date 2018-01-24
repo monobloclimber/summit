@@ -14,7 +14,7 @@ class Route{
     private $callable;
     private $middleware;
     private $matches = [];
-    private $params = [];
+    public $params = [];
 
     public function __construct($path, $callable, $middleware){
         $this->path = trim($path, '/');
