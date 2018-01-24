@@ -39,6 +39,7 @@ class Pagination {
 	}
 
 	public function appends($params = null){
+		unset($params['page']);
 		if($params){
 			foreach ($params as $key => $value) {
 				$tab[] = $key.'='.$value;
