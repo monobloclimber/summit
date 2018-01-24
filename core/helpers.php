@@ -167,6 +167,16 @@ function cryptPwd($string){
 }
 
 /**
+ * Return true if the string matches the encrypted string
+ * @param  string $string
+ * @param  string $hash
+ * @return boulean
+ */
+function verifyPwd($string, $hash){
+	return password_verify($string, $hash);
+}
+
+/**
  * Return current URL
  * @return string
  */
