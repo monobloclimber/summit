@@ -246,10 +246,19 @@ class QueryBuilder extends Models{
 
 	public function delete(){
 		$req = 'DELETE FROM ' . $this->from[0];
+		$values = null;
+		
+		if($this->where || $this->whereIn){
+			$return = $this->preprocessingOnWhere($req);
+			$req = $return[0];
+			$values = $return[1];
+		}
 
-		$return = $this->preprocessingOnWhere($req);
-		$req = $return[0];
-		$values = $return[1];
+		if($this->whereRaw){
+			foreach ($this->whereRaw as $where){
+				$req .= ' '.$where;
+			}
+		}
 
 		return \App::get()->getDB()->executeBind($req, $values);
 	}
@@ -295,8 +304,13 @@ class QueryBuilder extends Models{
 			foreach ($this->orWhere as $where) {
 				$column = $where[0];
 				$ref = uniqid(':');
-				$sign = $where[1];
-				$value = $where[2];
+				if(count($where) == 2){
+					$sign = '=';
+					$value = $where[1];
+				}else{
+					$sign = $where[1];
+					$value = $where[2];
+				}
 				$orWhereRefs[] = $column . ' ' . $sign . ' ' . $ref;
 				$values[] = [$ref => $value];
 			}
