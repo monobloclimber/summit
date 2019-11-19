@@ -76,7 +76,9 @@ class Router{
 
 	public function add($path, $callable, $name, $method, $middleware, $constraint){
 		$route = new Route($path, $callable, $middleware);
-		$route->params = $constraint;
+		foreach ($constraint as $key => $regex) {
+			$route->params[$key] = str_replace('(', '(?:', $regex);
+		}
 		$this->routes[$method][] = $route;
 
 		if($name){
