@@ -228,3 +228,17 @@ function segmentUri($segment){
 function c($string){
 	return htmlentities($string);
 }
+
+/**
+ * Add http:// in front of the string if necessary
+ * @param  string $string
+ * @return string
+ */
+function makeUrl($string){
+	$string = trim($string);
+
+	if(substr($string, 0, 7) != 'http://' && substr($string, 0, 8) != 'https://'){
+		return 'http://'.$string;
+	}
+	return $string;
+}
