@@ -101,4 +101,8 @@ class Database{
 	public function commit(){
 		$this->getPdo()->commit();
 	}
+
+	public function rollback(){
+		$this->getPdo()->rollBack();
+	}
 }
