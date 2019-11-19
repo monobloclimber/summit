@@ -244,8 +244,51 @@ class QueryBuilder extends Models{
 		return \App::get()->getDB()->executeBind($req, $values);
 	}
 
-	public function delete(){
-		$req = 'DELETE FROM ' . $this->from[0];
+	public function delete($from_table = ''){
+		$req = 'DELETE ' . $from_table . ' FROM ' . $this->from[0];
+
+		if($this->join){
+			foreach ($this->join as $join) {
+				if(count($join) == 3){
+					$sign = '=';
+					$last = $join[2];
+				}else{
+					$sign = $join[2];
+					$last = $join[3];
+				}
+
+				$req .= ' INNER JOIN ' . $join[0] . ' ON ' . $join[1] . ' ' . $sign  . ' ' . $last;
+			}
+		}
+
+		if($this->leftJoin){
+			foreach ($this->leftJoin as $join) {
+				if(count($join) == 3){
+					$sign = '=';
+					$last = $join[2];
+				}else{
+					$sign = $join[2];
+					$last = $join[3];
+				}
+
+				$req .= ' LEFT JOIN ' . $join[0] . ' ON ' . $join[1] . ' ' . $sign  . ' ' . $last;
+			}
+		}
+
+		if($this->rightJoin){
+			foreach ($this->rightJoin as $join) {
+				if(count($join) == 3){
+					$sign = '=';
+					$last = $join[2];
+				}else{
+					$sign = $join[2];
+					$last = $join[3];
+				}
+
+				$req .= ' RIGHT JOIN ' . $join[0] . ' ON ' . $join[1] . ' ' . $sign  . ' ' . $last;
+			}
+		}
+
 		$values = null;
 		
 		if($this->where || $this->whereIn){
