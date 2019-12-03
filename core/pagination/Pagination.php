@@ -64,7 +64,7 @@ class Pagination {
 		$previous = '';
 		$next = '';
 		$middle = '';
-		$start = '<nav><ul class="pagination">';
+		$start = '<nav><ul class="pagination justify-content-center">';
 
 		# Determine previous class
 		if($this->currentPage == 1){
@@ -77,57 +77,59 @@ class Pagination {
 		}
 
 		# Generates previous page
-		$pagination .= '<li class="'.$previous.'">';
+		$pagination .= '<li class="page-item '.$previous.'">';
 		if($this->currentPage > 1){
-			$pagination .= '<a href="'.$this->params.'page='.($this->currentPage - 1).'" aria-label="Previous">';
+			$pagination .= '<a class="page-link" href="'.$this->params.'page='.($this->currentPage - 1).'" aria-label="Previous">';
+		}else{
+			$pagination .= '<a class="page-link" href="#" aria-disabled="true">';
 		}
 		$pagination .= '<span aria-hidden="true">&laquo;</span>';
-		if($this->currentPage > 1){
-			$pagination .= '</a>';
-		}
+		$pagination .= '</a>';
 		$pagination .= '</li>';
 
 		# Generates numbers page
 		if($this->pageNumber < 5){
 			for($i = 1; $i <= $this->pageNumber; $i++){
 				if($i != $this->currentPage){
-					$pagination .= '<li><a href="'.$this->params.'page='.$i.'">'.$i.'</a></li>';
+					$pagination .= '<li class="page-item"><a class="page-link" href="'.$this->params.'page='.$i.'">'.$i.'</a></li>';
 				}else{
-					$pagination .= '<li class="active"><a href="'.$this->params.'page='.$i.'">'.$i.'<span class="sr-only">(current)</span></a></li>';
+					$pagination .= '<li class="page-item active"><a class="page-link" href="'.$this->params.'page='.$i.'">'.$i.'<span class="sr-only">(current)</span></a></li>';
 				}
 			}
 		}else{
 			if($this->currentPage < ($this->pageNumber - 1)){
-				$pagination .= '<li class="active"><a href="'.$this->params.'page='.$this->currentPage.'">'.$this->currentPage.'<span class="sr-only">(current)</span></a></li>';
-				$pagination .= '<li><a href="'.$this->params.'page='.($this->currentPage + 1).'">'.($this->currentPage + 1).'</a></li>';
+				$pagination .= '<li class="page-item active"><a class="page-link" href="'.$this->params.'page='.$this->currentPage.'">'.$this->currentPage.'<span class="sr-only">(current)</span></a></li>';
+				$pagination .= '<li class="page-item"><a class="page-link" href="'.$this->params.'page='.($this->currentPage + 1).'">'.($this->currentPage + 1).'</a></li>';
 			}else{
-				$pagination .= '<li><a href="'.$this->params.'page=1">1</a></li>';
-				$pagination .= '<li><a href="'.$this->params.'page=2">2</a></li>';
+				$pagination .= '<li class="page-item"><a class="page-link" href="'.$this->params.'page=1">1</a></li>';
+				$pagination .= '<li class="page-item"><a class="page-link" href="'.$this->params.'page=2">2</a></li>';
 			}
 
-			$pagination .= '<li class="disabled"><span>...</span></li>';
+			$pagination .= '<li class="page-item disabled"><span>...</span></li>';
 
 			if($this->currentPage < ($this->pageNumber - 1)){
-				$pagination .= '<li><a href="'.$this->params.'page='.($this->pageNumber - 1).'">'.($this->pageNumber - 1).'</a></li>';
-				$pagination .= '<li><a href="'.$this->params.'page='.$this->pageNumber.'">'.$this->pageNumber.'</a></li>';
+				$pagination .= '<li class="page-item"><a class="page-link" href="'.$this->params.'page='.($this->pageNumber - 1).'">'.($this->pageNumber - 1).'</a></li>';
+				$pagination .= '<li class="page-item"><a class="page-link" href="'.$this->params.'page='.$this->pageNumber.'">'.$this->pageNumber.'</a></li>';
 			}elseif($this->currentPage == ($this->pageNumber - 1)){
-				$pagination .= '<li class="active"><a href="'.$this->params.'page='.$this->currentPage.'">'.$this->currentPage.'<span class="sr-only">(current)</span></a></li>';
-				$pagination .= '<li><a href="'.$this->params.'page='.$this->pageNumber.'">'.$this->pageNumber.'</a></li>';
+				$pagination .= '<li class="page-item active"><a class="page-link" href="'.$this->params.'page='.$this->currentPage.'">'.$this->currentPage.'<span class="sr-only">(current)</span></a></li>';
+				$pagination .= '<li class="page-item"><a class="page-link" href="'.$this->params.'page='.$this->pageNumber.'">'.$this->pageNumber.'</a></li>';
 			}else{
-				$pagination .= '<li><a href="'.$this->params.'page='.($this->pageNumber - 1).'">'.($this->pageNumber - 1).'</a></li>';
-				$pagination .= '<li class="active"><a href="'.$this->params.'page='.$this->currentPage.'">'.$this->currentPage.'<span class="sr-only">(current)</span></a></li>';
+				$pagination .= '<li class="page-item"><a class="page-link" href="'.$this->params.'page='.($this->pageNumber - 1).'">'.($this->pageNumber - 1).'</a></li>';
+				$pagination .= '<li class="page-item active"><a class="page-link" href="'.$this->params.'page='.$this->currentPage.'">'.$this->currentPage.'<span class="sr-only">(current)</span></a></li>';
 			}
 		}
 
 		# Generates next page
-		$pagination .= '<li class="'.$next.'">';
+		$pagination .= '<li class="page-item '.$next.'">';
 		if($this->currentPage != $this->pageNumber){
-			$pagination .= '<a href="'.$this->params.'page='.($this->currentPage + 1).'" aria-label="Next">';
+			$pagination .= '<a class="page-link" href="'.$this->params.'page='.($this->currentPage + 1).'" aria-label="Next">';
+		}else{
+			$pagination .= '<a class="page-link" href="#" aria-disabled="true">';
 		}
+
 		$pagination .= '<span aria-hidden="true">&raquo;</span>';
-		if($this->currentPage != $this->pageNumber){
-			$pagination .= '</a>';
-		}
+		$pagination .= '</a>';
+		
 		$pagination .= '</li>';
 		
 		$end = '</ul></nav>';
