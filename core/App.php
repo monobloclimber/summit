@@ -7,11 +7,11 @@
  */
 
 use \Core\Authentication\Authentication;
-use \Core\Autoloader\Autoloader;
 use \Core\Database\QueryBuilder;
-use \App\Middleware\Middleware;
+use \App\Middlewares\Middleware;
 use \Core\Database\Database;
 use \Core\Router\Router;
+use \Core\Config\Config;
 
 class App{
 
@@ -35,12 +35,8 @@ class App{
 	 * Launches the prerequisites to using the application
 	 */
 	public function run(){
-		require_once(ROOT.'/core/autoloader/Autoloader.php');
-		$paths = require_once(ROOT.'/app/config/paths.php');
-		$autoloader = new Autoloader($paths);
-		$autoloader->start();
+		require_once(ROOT.'/vendor/autoload.php');
 		
-		$config = require(ROOT.'/app/config/app.php');
 		define('DEBUG', Config::get()->read('debug'));
 		if(!DEBUG){
 			error_reporting(0);

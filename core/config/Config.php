@@ -3,6 +3,9 @@
 /**
  * Provides the configuration of the application
  */
+
+namespace Core\Config;
+
 class Config{
 	
 	private $settings = [];

@@ -6,7 +6,7 @@
  * 
  */
 
-namespace App\Middleware;
+namespace App\Middlewares;
 
 class Middleware{
 	/**
@@ -14,7 +14,7 @@ class Middleware{
 	 * @var array
 	 */
 	protected $globalMiddleware = [
-		'App\Middleware\Maintenance',
+		'App\Middlewares\Maintenance',
 	];
 
 	/**

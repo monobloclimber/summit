@@ -48,7 +48,7 @@ class Route{
     }
 
     public function call(){
-        $globalMiddleware = new \App\Middleware\Middleware();
+        $globalMiddleware = new \App\Middlewares\Middleware();
         $routeMiddleware = $globalMiddleware->routeMiddleware;
         if(!is_null($this->middleware)){
             if(array_key_exists($this->middleware, $routeMiddleware)){
@@ -63,7 +63,7 @@ class Route{
 
     	if(is_string($this->callable)){
     		$params = explode('@', $this->callable);
-    		$controller = "App\\Controller\\" . $params[0];
+    		$controller = "App\\Controllers\\" . $params[0];
     		$controller = new $controller();
             return call_user_func_array([$controller, $params[1]], $this->matches);
     	}else{
